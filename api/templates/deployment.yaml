@@ -40,6 +40,13 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          env:
+            - name: MONGODB_HOSTNAME
+              value: "{{ .Values.mongodb.host }}"
+            - name: MONGODB_PORT
+              value: "{{ .Values.mongodb.port }}"
+            - name: MONGODB_DATABASE
+              value: "{{ .Values.mongodb.database }}"
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
