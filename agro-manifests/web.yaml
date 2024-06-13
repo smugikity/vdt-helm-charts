@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: helm-web
+  namespace: default
+spec:
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  sources:
+    - repoURL: "https://github.com/smugikity/vdt-helm-charts"
+      path: web
+      targetRevision: HEAD
+      helm:
+        valueFiles:
+          - $values/values.yaml
+    - repoURL: "https://github.com/smugikity/vdt-config-web"
+      targetRevision: HEAD
+      ref: values
