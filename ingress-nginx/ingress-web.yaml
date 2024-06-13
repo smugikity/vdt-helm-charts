@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: web.vdt.arpa
+    http:
+      paths:
+      - backend:
+          service:
+            name: helm-web
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+      - web.vdt.arpa
+    secretName: my-tls-secret

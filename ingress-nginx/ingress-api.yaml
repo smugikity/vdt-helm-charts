@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api
+  annotations:
+    nginx.ingress.kubernetes.io/limit-connections: "10" #concurrent connections
+    nginx.ingress.kubernetes.io/limit-rps: "0" #p sec
+    nginx.ingress.kubernetes.io/limit-rpm: "10" #p min
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
+    nginx.ingress.kubernetes.io/limit-exempt: "none"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: api.vdt.arpa
+    http:
+      paths:
+      - backend:
+          service:
+            name: helm-api
+            port:
+              number: 5000
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - api.vdt.arpa
+    secretName: self-signed-tls
